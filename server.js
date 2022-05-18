@@ -11,6 +11,9 @@ app.set('views', __dirname + '/views')
 app.set('view engine', 'jsx')
 app.engine('jsx', require('express-react-views').createEngine())
 
+//MIDDLEWARE PART DEUX
+app.use(express.static('public'))
+
 //ROUTES
 app.use('/breads', breadRoutes)
 
