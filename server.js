@@ -13,6 +13,7 @@ app.engine('jsx', require('express-react-views').createEngine())
 
 //MIDDLEWARE PART DEUX
 app.use(express.static('public'))
+app.use(express.urlencoded({extended: true}))
 
 //ROUTES
 app.use('/breads', breadRoutes)
