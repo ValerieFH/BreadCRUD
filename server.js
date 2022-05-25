@@ -4,6 +4,7 @@ require('dotenv').config()
 const PORT = process.env.PORT
 const breadRoutes = require('./controllers/breads_controller')
 const methodOverrid = require('method-override')
+const mongoose = require('mongoose')
 
 const app = express()
 
@@ -22,5 +23,10 @@ app.use('/breads', breadRoutes)
 app.get('/', (req, res) => {
     res.send("Welcome to BREAD!")
 })
+
+// Database connection
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true})
+    .then(() => console.log('DB is locked and loaded'))
+    .catch(err => console.error(err));
 
 app.listen(PORT, () => console.log(`Live and worldwide at port ${PORT}`))
