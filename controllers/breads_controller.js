@@ -2,6 +2,7 @@ const express = require('express')
 const req = require('express/lib/request')
 const router = express.Router()
 const Bread = require('../models/bread')
+const Baker = require('../models/baker')
 const seedData = require('../models/seed')
 
 router.get('/seed', async (req, res) => {
@@ -18,8 +19,10 @@ router.get('/seed', async (req, res) => {
 router.get('/', async (req, res) => {
     try {
         const bread = await Bread.find()
+        const bakers = await Baker.find()
         res.render('index', {
             breads: bread,
+            bakers,
             title: 'Behold, all da Breads'
         })
     } catch (error) {
@@ -28,15 +31,17 @@ router.get('/', async (req, res) => {
     }
 })
 
-router.get('/new', (req, res) => {
-    res.render('new')
+router.get('/new', async (req, res) => {
+    const bakers = await Baker.find()
+    console.log(bakers)
+    res.render('new', {bakers})
 })
 
 //get bread by index
 router.get('/:id', async (req, res) => {
     try {
         const {  id  } = req.params
-        const bread = await Bread.findById(id)
+        const bread = await Bread.findById(id).populate('baker')
         console.log(bread)
         res.render('show', {
             bread
@@ -69,9 +74,11 @@ router.post('/', async (req, res) => {
 //UPDATE
 router.get('/:id/edit', async (req, res) => {
     const { id } = req.params
-    const bread = await Bread.findById(id)
+    const bread = await Bread.findById(id).populate('baker')
+    const bakers = await Baker.find()
     res.render('edit', {
-        bread
+        bread,
+        bakers
     })
 })
 
